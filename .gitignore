@@ -4,3 +4,4 @@
 /RetakesPluginShared/.idea
 *.DotSettings.user
 *.sln
+/other/*

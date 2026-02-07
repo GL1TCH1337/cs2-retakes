@@ -15,4 +15,7 @@ public class GameSettings
 
     [JsonPropertyName("EnableFallbackAllocation")]
     public bool EnableFallbackAllocation { get; set; } = true;
+
+    [JsonPropertyName("EnableAutomaticGrenades")]
+    public bool EnableAutomaticGrenades { get; set; } = false;
 }

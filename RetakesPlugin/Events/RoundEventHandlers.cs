@@ -16,12 +16,14 @@ public class RoundEventHandlers
     private readonly RetakesPlugin _plugin;
     private readonly GameManager _gameManager;
     private readonly SpawnManager _spawnManager;
+    private readonly GrenadeManager? _grenadeManager;
     private readonly BreakerManager? _breakerManager;
     private readonly AllocationService _allocationService;
     private readonly AnnouncementService _announcementService;
     private readonly bool _isAutoPlantEnabled;
     private readonly bool _enableFallbackAllocation;
     private readonly bool _enableFallbackBombsiteAnnouncement;
+    private readonly bool _enableAutomaticGrenades;
     private readonly Random _random;
     private ShowSpawnsCommand? _showSpawnsCommand;
 
@@ -30,20 +32,23 @@ public class RoundEventHandlers
     private CsTeam _lastRoundWinner = CsTeam.None;
     private Bombsite? _forcedBombsite;
 
-    public RoundEventHandlers(RetakesPlugin plugin, GameManager gameManager, SpawnManager spawnManager, BreakerManager? breakerManager, AllocationService allocationService, AnnouncementService announcementService, bool isAutoPlantEnabled, bool enableFallbackAllocation, bool enableFallbackBombsiteAnnouncement, Random random)
+    public RoundEventHandlers(RetakesPlugin plugin, GameManager gameManager, SpawnManager spawnManager, GrenadeManager? grenadeManager, BreakerManager? breakerManager, AllocationService allocationService, AnnouncementService announcementService, bool isAutoPlantEnabled, bool enableFallbackAllocation, bool enableFallbackBombsiteAnnouncement, bool enableAutomaticGrenades, Random random)
     {
         _plugin = plugin;
         _gameManager = gameManager;
         _spawnManager = spawnManager;
+        _grenadeManager = grenadeManager;
         _breakerManager = breakerManager;
         _allocationService = allocationService;
         _announcementService = announcementService;
         _isAutoPlantEnabled = isAutoPlantEnabled;
         _enableFallbackAllocation = enableFallbackAllocation;
         _enableFallbackBombsiteAnnouncement = enableFallbackBombsiteAnnouncement;
+        _enableAutomaticGrenades = enableAutomaticGrenades;
         _random = random;
         
         Logger.LogInfo("RoundEventHandlers", $"EnableFallbackAllocation inicializado a: {_enableFallbackAllocation}");
+        Logger.LogInfo("RoundEventHandlers", $"EnableAutomaticGrenades inicializado a: {_enableAutomaticGrenades}");
     }
 
     public void SetCommandReferences(ShowSpawnsCommand? showSpawnsCommand)
@@ -135,6 +140,12 @@ public class RoundEventHandlers
         if (_enableFallbackBombsiteAnnouncement)
         {
             _announcementService.AnnounceBombsite(_currentBombsite);
+        }
+
+        // Setup automatic grenades if enabled
+        if (_enableAutomaticGrenades && _grenadeManager != null)
+        {
+            _grenadeManager.SetupGrenades(_currentBombsite);
         }
 
         RetakesPlugin.RetakesPluginEventSenderCapability.Get()?.TriggerEvent(new AnnounceBombsiteEvent(_currentBombsite));

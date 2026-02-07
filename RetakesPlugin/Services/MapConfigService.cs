@@ -66,6 +66,16 @@ public class MapConfigService
         return _mapConfigData.Spawns.ToList();
     }
 
+    public List<Grenade> GetGrenadesClone()
+    {
+        if (_mapConfigData == null)
+        {
+            throw new Exception("Map config data is null");
+        }
+
+        return _mapConfigData.Grenades.ToList();
+    }
+
     public bool AddSpawn(Spawn spawn)
     {
         _mapConfigData ??= new MapConfigData();

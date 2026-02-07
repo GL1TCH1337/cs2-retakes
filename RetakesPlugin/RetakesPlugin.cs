@@ -18,6 +18,7 @@ using RetakesPlugin.Commands.Admin;
 using RetakesPlugin.Commands.MapConfig;
 using RetakesPlugin.Commands.Player;
 using RetakesPlugin.Commands.SpawnEditor;
+using RetakesPlugin.Commands.GrenadeEditor;
 
 namespace RetakesPlugin;
 
@@ -49,6 +50,7 @@ public class RetakesPlugin : BasePlugin, IPluginConfig<BaseConfigs>
     private readonly JsonSerializerOptions _jsonOptions;
     private GameManager? _gameManager;
     private SpawnManager? _spawnManager;
+    private GrenadeManager? _grenadeManager;
     private BreakerManager? _breakerManager;
     private MapConfigService? _mapConfigService;
     private AllocationService? _allocationService;
@@ -80,6 +82,9 @@ public class RetakesPlugin : BasePlugin, IPluginConfig<BaseConfigs>
     private RemoveSpawnCommand? _removeSpawnCommand;
     private NearestSpawnCommand? _nearestSpawnCommand;
     private HideSpawnsCommand? _hideSpawnsCommand;
+
+    // Grenade Editor Commands
+    private AddGrenadeCommand? _addGrenadeCommand;
     #endregion
 
     #region Capabilities
@@ -161,6 +166,7 @@ public class RetakesPlugin : BasePlugin, IPluginConfig<BaseConfigs>
 
             // Initialize Managers
             _spawnManager = new SpawnManager(_mapConfigService);
+            _grenadeManager = new GrenadeManager(_mapConfigService);
             _allocationService = new AllocationService(_random);
 
             _gameManager = new GameManager(
@@ -198,12 +204,14 @@ public class RetakesPlugin : BasePlugin, IPluginConfig<BaseConfigs>
                 this,
                 _gameManager,
                 _spawnManager,
+                _grenadeManager,
                 _breakerManager,
                 _allocationService,
                 _announcementService,
                 Config.Bomb.IsAutoPlantEnabled,
                 Config.Game.EnableFallbackAllocation,
                 Config.MapConfig.EnableFallbackBombsiteAnnouncement,
+                Config.Game.EnableAutomaticGrenades,
                 _random
             );
 
@@ -228,6 +236,8 @@ public class RetakesPlugin : BasePlugin, IPluginConfig<BaseConfigs>
             _removeSpawnCommand = new RemoveSpawnCommand(this, _showSpawnsCommand);
             _nearestSpawnCommand = new NearestSpawnCommand(this, _showSpawnsCommand);
             _hideSpawnsCommand = new HideSpawnsCommand(this, _showSpawnsCommand);
+
+            _addGrenadeCommand = new AddGrenadeCommand(this, _jsonOptions);
 
             // Set command references in event handlers
             _roundEventHandlers?.SetCommandReferences(_showSpawnsCommand);
@@ -286,6 +296,13 @@ public class RetakesPlugin : BasePlugin, IPluginConfig<BaseConfigs>
 
         // Player Commands
         AddCommand("css_voices", "Toggles whether or not you want to hear bombsite voice announcements.", _voicesCommand.OnCommand);
+
+        // Grenade Editor Commands
+        if (_addGrenadeCommand != null)
+        {
+            AddCommand("css_addgrenade", "Generates grenade config JSON from your current position.", _addGrenadeCommand.OnCommand);
+            AddCommand("css_grenadeconfig", "Generates grenade config JSON from your current position.", _addGrenadeCommand.OnCommand);
+        }
 
         Utils.Logger.LogInfo("Commands", "All commands registered successfully");
     }

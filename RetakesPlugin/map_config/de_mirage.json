@@ -231,5 +231,57 @@
       "Bombsite": 0,
       "CanBePlanter": false
     }
+  ],
+  "Grenades": [
+    {
+      "Name": "CT Spawn Smoke",
+      "Type": 2,
+      "Position": "1246.15 -880.11 -46.61",
+      "Angle": "0.00 0.00 0.00",
+      "Velocity": "-478.80 -343.62 598.74",
+      "Team": 2,
+      "Bombsite": 0,
+      "Delay": 0.5
+    },
+    {
+      "Name": "Jungle Smoke",
+      "Type": 2,
+      "Position": "803.02 -1418.00 -35.70",
+      "Angle": "0.00 0.00 0.00",
+      "Velocity": "-546.29 -65.67 391.00",
+      "Team": 2,
+      "Bombsite": 0,
+      "Delay": 0.3
+    },
+    {
+      "Name": "Stairs Smoke",
+      "Type": 2,
+      "Position": "1030.70 -1216.11 -36.80",
+      "Angle": "0.00 0.00 0.00",
+      "Velocity": "-562.56 -142.42 344.77",
+      "Team": 2,
+      "Bombsite": 0,
+      "Delay": 0.1
+    },
+    {
+      "Name": "Market Window Smoke",
+      "Type": 2,
+      "Position": "-167.71 882.88 -32.71",
+      "Angle": "0.00 0.00 0.00",
+      "Velocity": "-323.81 -214.51 821.74",
+      "Team": 2,
+      "Bombsite": 1,
+      "Delay": 0.2
+    },
+    {
+      "Name": "B Short Smoke",
+      "Type": 2,
+      "Position": "1347.02 518.13 -159.62",
+      "Angle": "0.00 0.00 0.00",
+      "Velocity": "-534.37 -77.55 674.59",
+      "Team": 2,
+      "Bombsite": 1,
+      "Delay": 0.4
+    }
   ]
 }
